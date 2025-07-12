@@ -1,74 +1,38 @@
-import React from 'react';
+// src/pages/Dashboard.jsx
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
-const Dashboard = ({ applications }) => {
-  const total = applications.length;
-  const pending = applications.filter(app => !app.status).length;
-  const approved = applications.filter(app => app.status === 'Approved').length;
-  const rejected = applications.filter(app => app.status === 'Rejected').length;
+const Dashboard = () => {
+  const [applications, setApplications] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/dashboard')
+      .then(res => res.json())
+      .then(data => setApplications(data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
-    <div className="dashboard-page">
-      <h1>ATS Dashboard</h1>
-
-      <div className="summary-cards">
-        <div className="card">Total Applications <span>{total}</span></div>
-        <div className="card approved">Approved <span>{approved}</span></div>
-        <div className="card rejected">Rejected <span>{rejected}</span></div>
-        <div className="card pending">Pending <span>{pending}</span></div>
-      </div>
-
-      <h2>Submitted Applications</h2>
-      <table className="application-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Candidate Name</th>
-            <th>Email</th>
-            <th>Position</th>
-            <th>Resume Topic</th>
-            <th>Resume File</th>
-            <th>Skills</th>
-            <th>Match</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((app, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{app.name}</td>
-              <td>{app.email}</td>
-              <td>{app.position}</td>
-              <td>{app.resumeTopic}</td>
-              <td>
-                {app.resumeFile ? (
-                  <a
-                    href={`http://localhost:5000/uploads/${app.resumeFile}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#007bff', textDecoration: 'underline' }}
-                  >
-                    View Resume
-                  </a>
-                ) : (
-                  'No File'
-                )}
-              </td>
-              <td>{(app.skills || []).join(', ')}</td>
-              <td>
-                <span
-                  style={{
-                    color: app.matchStatus === 'Good Match' ? 'green' : 'red',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {app.matchStatus}
-                </span>
-              </td>
-            </tr>
+    <div className="dashboard-container">
+      <h2>📊 My Application Dashboard</h2>
+      {applications.length === 0 ? (
+        <p className="empty">No applications submitted yet. Start exploring jobs!</p>
+      ) : (
+        <div className="application-grid">
+          {applications.map(app => (
+            <div key={app._id} className="application-card">
+              <div className="card-header">
+                <h3>{app.jobTitle}</h3>
+                <span className={`status-tag ${app.status.toLowerCase()}`}>{app.status}</span>
+              </div>
+              <p><strong>Match Score:</strong> <span className="score">{app.matchScore}%</span></p>
+              <p><strong>Applied On:</strong> {new Date(app.appliedAt).toLocaleDateString()}</p>
+              <Link to={`/applicants/${app._id}`} className="details-button">🔎 View Full Profile</Link>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,45 +1,42 @@
-// This is the main App component for a styled ATS dashboard with pages
-import React, { useState } from 'react';
-import './styles/App.css';
-import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Importing components
+import Navbar from './components/Navbar';
+
+// Importing pages
+import Home from './pages/Home';
 import Jobs from './pages/Jobs';
-import Applications from './pages/Applications';
-import Reports from './pages/Reports';
+import JobDetails from './pages/JobDetails';
+import Apply from './pages/Apply';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import NotFound from './pages/NotFound';
+import Applicants from './pages/Applicants'; // ✅ New import
 
-
-function App() {
-  const [page, setPage] = useState('Dashboard');
-  const [applications, setApplications] = useState([]);
-
-  const handleApplicationSubmit = (newData) => {
-    setApplications([...applications, newData]);
-  };
-
-  const renderPage = () => {
-    switch (page) {
-      case 'Dashboard':
-        return <Dashboard applications={applications} />;
-      case 'Jobs':
-        return <Jobs />;
-      case 'Applications':
-        return <Applications onSubmit={handleApplicationSubmit} />;
-      case 'Reports':
-        return <Reports />;
-      
-      default:
-        return <Dashboard applications={applications} />;
-    }
-  };
-
+const App = () => {
   return (
-    <div className="dashboard">
-      <Sidebar onSelect={setPage} />
-      <div className="content">
-        {renderPage()}
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/job/:jobId" element={<JobDetails />} />
+            <Route path="/apply/:jobId" element={<Apply />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/applicants" element={<Applicants />} /> {/* ✅ New route */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </Router>
   );
-}
+};
 
 export default App;
