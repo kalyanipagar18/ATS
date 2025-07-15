@@ -1,27 +1,53 @@
-// src/pages/JobDetails.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const JobDetails = () => {
-  const { jobId } = useParams();
+  const { id } = useParams(); // job ID from URL
   const [job, setJob] = useState(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/jobs/${jobId}`)
+    fetch(`http://localhost:5000/api/jobs/${id}`)
       .then(res => res.json())
       .then(data => setJob(data))
-      .catch(err => console.error('Failed to load job details', err));
-  }, [jobId]);
+      .catch(err => console.error('Failed to load job', err));
+  }, [id]);
 
-  if (!job) return <div className="text-center p-10">Loading job...</div>;
+  const handleApply = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) {
+      alert('Please log in first!');
+      return;
+    }
+
+    const res = await fetch('http://localhost:5000/api/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: user.id,
+        jobId: job._id,
+        jobTitle: job.title,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      setMessage('Application submitted successfully!');
+    } else {
+      setMessage(data.message || 'Failed to apply.');
+    }
+  };
+
+  if (!job) return <div>Loading job details...</div>;
 
   return (
-    <div className="p-8 max-w-3xl mx-auto bg-white mt-10 rounded shadow">
-      <h1 className="text-3xl font-bold text-indigo-700 mb-4">{job.title}</h1>
-      <p className="text-gray-700 mb-2"><strong>Description:</strong> {job.description}</p>
-      <p className="text-gray-700 mb-2"><strong>Location:</strong> {job.location}</p>
-      <p className="text-gray-700 mb-4"><strong>Requirements:</strong> {job.requirements}</p>
-      <Link to={`/apply/${job._id}`} className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">Apply Now</Link>
+    <div className="job-details">
+      <h2>{job.title}</h2>
+      <p><strong>Location:</strong> {job.location}</p>
+      <p><strong>Description:</strong> {job.description}</p>
+      <button onClick={handleApply}>Apply for this Job</button>
+      {message && <p>{message}</p>}
     </div>
   );
 };

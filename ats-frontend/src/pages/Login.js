@@ -14,16 +14,33 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password || !role) {
-      setError('All fields are required!');
-      return;
-    }
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
 
-    // Simulated login logic
-    if (email === 'admin@example.com' && password === 'admin123') {
-      navigate('/dashboard');
-    } else {
-      setError('Invalid credentials. Please try again.');
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      // Save token and user data if needed
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Redirect based on role
+      if (data.user.role === 'applicant') {
+        navigate('/dashboard');
+      } else if (data.user.role === 'recruiter') {
+        navigate('/applicants');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Something went wrong. Please try again later.');
     }
   };
 

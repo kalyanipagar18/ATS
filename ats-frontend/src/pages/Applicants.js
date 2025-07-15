@@ -1,21 +1,38 @@
-// src/pages/Applicants.jsx
 import React, { useEffect, useState } from 'react';
 import './Applicants.css';
 
 const Applicants = () => {
   const [applicants, setApplicants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/applicants')
       .then(res => res.json())
-      .then(data => setApplicants(data))
-      .catch(err => console.error(err));
+      .then(data => {
+        console.log('📥 Applicants API Response:', data);
+        if (Array.isArray(data)) {
+          setApplicants(data);
+        } else if (data && Array.isArray(data.applicants)) {
+          setApplicants(data.applicants);
+        } else {
+          console.error('❌ Unexpected applicants format:', data);
+          setApplicants([]);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('❌ Error fetching applicants:', err);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <div className="applicants-container">
       <h2>📋 All Applicants</h2>
-      {applicants.length === 0 ? (
+
+      {loading ? (
+        <p className="empty-text">Loading applicants...</p>
+      ) : applicants.length === 0 ? (
         <p className="empty-text">No applicants found.</p>
       ) : (
         <div className="applicants-grid">

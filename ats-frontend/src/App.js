@@ -15,6 +15,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import Applicants from './pages/Applicants'; // ✅ New import
+import AddJob from './pages/AddJob';
+
+
 
 const App = () => {
   return (
@@ -31,6 +34,7 @@ const App = () => {
             <Route path="/applicants" element={<Applicants />} /> {/* ✅ New route */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/add-job" element={<AddJob />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
