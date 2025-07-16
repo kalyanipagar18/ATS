@@ -3,17 +3,19 @@ const router = express.Router();
 const Job = require('../models/Job');
 const { protect } = require('../middleware/authMiddleware'); // ✅ Protect route
 
-// Get all jobs
+// ✅ GET all jobs or only jobs by specific recruiter
 router.get('/', async (req, res) => {
   try {
-    const jobs = await Job.find().sort({ createdAt: -1 });
+    const { postedBy } = req.query; // ✅ Support recruiter filter
+    const filter = postedBy ? { postedBy } : {};
+    const jobs = await Job.find(filter).sort({ createdAt: -1 });
     res.json(jobs);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// Get single job
+// ✅ GET single job by ID
 router.get('/:id', async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
@@ -24,18 +26,18 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ Post a new job (with postedBy)
+// ✅ POST new job (Recruiter only)
 router.post('/', protect, async (req, res) => {
-
-
-  const { title, location, description } = req.body;
+  const { title, location, description, skills, salary } = req.body;
 
   try {
     const newJob = new Job({
       title,
       location,
       description,
-      postedBy: req.user.id, // 👈 Save recruiter ID
+      skills,
+      salary,
+      postedBy: req.user.id, // 👈 Link recruiter
     });
 
     await newJob.save();
