@@ -1,66 +1,36 @@
+// 📄 AddJob.jsx - Post Job Form (Recruiter)
 import React, { useState } from 'react';
 import './AddJob.css';
 
 const AddJob = () => {
-  const [jobData, setJobData] = useState({
-    title: '',
-    location: '',
-    description: ''
-  });
-
-  const [message, setMessage] = useState('');
+  const [job, setJob] = useState({ title: '', location: '', description: '', skills: '', salary: '' });
 
   const handleChange = (e) => {
-    setJobData({ ...jobData, [e.target.name]: e.target.value });
+    setJob({ ...job, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:5000/api/jobs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jobData)
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      setMessage('✅ Job added successfully!');
-      setJobData({ title: '', location: '', description: '' });
-    } else {
-      setMessage(data.message || '❌ Failed to add job');
-    }
+    console.log('Posting job:', job);
+    // TODO: Connect to backend API
   };
 
   return (
-    <div className="add-job-page">
-      <h2>Post a New Job</h2>
-      <form onSubmit={handleSubmit} className="add-job-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Job Title"
-          value={jobData.title}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={jobData.location}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Job Description"
-          value={jobData.description}
-          onChange={handleChange}
-          required
-        ></textarea>
-        <button type="submit">Post Job</button>
+    <div className="addjob-container">
+      <h2 className="addjob-title">📝 Post a New Job</h2>
+      <p className="addjob-subtext">Fill out the form below to post a new job opening and attract top talent.</p>
+      <form className="addjob-form" onSubmit={handleSubmit}>
+        <h4 className="form-section">Job Information</h4>
+        <input type="text" name="title" placeholder="📌 Job Title" value={job.title} onChange={handleChange} required />
+        <input type="text" name="location" placeholder="📍 Location" value={job.location} onChange={handleChange} required />
+
+        <h4 className="form-section">Requirements</h4>
+        <textarea name="description" placeholder="📝 Job Description" value={job.description} onChange={handleChange} rows="4" required />
+        <input type="text" name="skills" placeholder="💡 Required Skills (comma-separated)" value={job.skills} onChange={handleChange} />
+        <input type="text" name="salary" placeholder="💰 Salary Range (e.g. 5-7 LPA)" value={job.salary} onChange={handleChange} />
+
+        <button type="submit">📤 Post Job</button>
       </form>
-      {message && <p className="message">{message}</p>}
     </div>
   );
 };

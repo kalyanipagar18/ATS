@@ -1,17 +1,24 @@
 const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
+  jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
+  recruiterId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // ✅ New field
+  applicantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
+  // Applicant Info
   name: String,
   email: String,
-  position: String,
-  resumeTopic: String,
+  phone: String,
+  github: String,
+  linkedin: String,
+  tenth: String,
+  twelfth: String,
+  cgpa: String,
+  location: String,
+  availability: String,
+  expectedSalary: String,
   resumeFile: String,
-  skills: [String],
-  matchStatus: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Application', applicationSchema);
+// ✅ Fix OverwriteModelError:
+module.exports = mongoose.models.Application || mongoose.model('Application', applicationSchema);

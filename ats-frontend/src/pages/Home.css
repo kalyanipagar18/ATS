@@ -122,3 +122,12 @@ nav {
     transform: translateY(0);
   }
 }
+
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}

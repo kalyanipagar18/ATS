@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
+const { protect } = require('../middleware/authMiddleware'); // ✅ Protect route
 
 // Get all jobs
 router.get('/', async (req, res) => {
@@ -23,12 +24,20 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Post a new job
-router.post('/', async (req, res) => {
+// ✅ Post a new job (with postedBy)
+router.post('/', protect, async (req, res) => {
+
+
   const { title, location, description } = req.body;
 
   try {
-    const newJob = new Job({ title, location, description });
+    const newJob = new Job({
+      title,
+      location,
+      description,
+      postedBy: req.user.id, // 👈 Save recruiter ID
+    });
+
     await newJob.save();
     res.status(201).json({ message: 'Job created successfully', job: newJob });
   } catch (err) {

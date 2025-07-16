@@ -1,5 +1,4 @@
-/* 🎨 AddJob.css */
-.addjob-container {
+.apply-job-container {
   padding: 3rem;
   background: linear-gradient(to right, #ede7f6, #e8eaf6);
   min-height: 90vh;
@@ -7,79 +6,70 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
 }
 
-.addjob-title {
+.apply-heading {
   font-size: 32px;
   color: #5c6bc0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
-.addjob-subtext {
+.apply-subtext {
   font-size: 16px;
   color: #555;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
-.addjob-form {
+.apply-form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;
   max-width: 600px;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   transition: transform 0.3s ease;
-  text-align: left;
 }
 
-.addjob-form:hover {
-  transform: translateY(-2px);
-}
-
-.addjob-form input,
-.addjob-form textarea {
+.apply-form input,
+.apply-form textarea {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.addjob-form input:focus,
-.addjob-form textarea:focus {
+.apply-form input:focus,
+.apply-form textarea:focus {
   border-color: #5c6bc0;
-  box-shadow: 0 0 5px rgba(92, 107, 192, 0.3);
+  box-shadow: 0 0 5px rgba(92, 107, 192, 0.25);
   outline: none;
 }
 
-.form-section {
-  margin-top: 1rem;
-  font-size: 18px;
+.upload-label {
   font-weight: 600;
+  margin-top: 0.5rem;
   color: #5c6bc0;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 4px;
 }
 
-.addjob-form button {
+.apply-form button {
   background-color: #5c6bc0;
   color: white;
   border: none;
   padding: 12px;
-  border-radius: 6px;
-  font-weight: bold;
   font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.addjob-form button:hover {
+.apply-form button:hover {
   background-color: #3f51b5;
-  transform: translateY(-2px);
+  transform: scale(1.03);
 }

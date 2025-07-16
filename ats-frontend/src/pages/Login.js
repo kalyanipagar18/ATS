@@ -7,7 +7,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('applicant');
+  const [role, setRole] = useState('applicant'); // role selection
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
@@ -28,16 +28,12 @@ const Login = () => {
         return;
       }
 
-      // Save token and user data if needed
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userRole', data.user.role);
+      localStorage.setItem('userId', data.user.id);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Redirect based on role
-      if (data.user.role === 'applicant') {
-        navigate('/dashboard');
-      } else if (data.user.role === 'recruiter') {
-        navigate('/applicants');
-      }
+      navigate('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
       setError('Something went wrong. Please try again later.');
@@ -78,7 +74,9 @@ const Login = () => {
           <button type="submit" className="login-button">Login</button>
         </form>
 
-        <p className="register-link">Don't have an account? <a href="/register">Register here</a></p>
+        <p className="register-link">
+          Don't have an account? <a href="/register">Register here</a>
+        </p>
       </div>
     </div>
   );

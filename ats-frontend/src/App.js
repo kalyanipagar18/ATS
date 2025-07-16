@@ -2,20 +2,24 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Importing components
+// Components
 import Navbar from './components/Navbar';
+import DashboardRouter from './components/DashboardRouter';
 
-// Importing pages
+// Pages
 import Home from './pages/Home';
-import Jobs from './pages/Jobs';
-import JobDetails from './pages/JobDetails';
-import Apply from './pages/Apply';
-import Dashboard from './pages/Dashboard';
+
+// import JobDetails from './pages/JobDetails';
+// import Apply from './pages/Apply';
+import ApplyJob from './pages/ApplyForJob'; // ✅ New
+import MyPostedJobs from './pages/MyPostedJobs'; // ✅ New
+import AddJob from './pages/AddJob';
+import Applicants from './pages/Applicants';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
-import Applicants from './pages/Applicants'; // ✅ New import
-import AddJob from './pages/AddJob';
+// import Jobs from './pages/Jobs'; // ✅ Add this
+
 
 
 
@@ -27,15 +31,30 @@ const App = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/jobs" element={<Jobs />} />
+            {/* <Route path="/jobs" element={<Jobs />} />
             <Route path="/job/:jobId" element={<JobDetails />} />
-            <Route path="/apply/:jobId" element={<Apply />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/applicants" element={<Applicants />} /> {/* ✅ New route */}
+            <Route path="/apply/:jobId" element={<Apply />} /> */}
+
+            {/* ✅ Role-based dashboard */}
+            <Route path="/dashboard" element={<DashboardRouter />} />
+
+            {/* ✅ Applicant-specific */}
+            <Route path="/apply" element={<ApplyJob />} />
+
+
+            {/* ✅ Recruiter-specific */}
+            <Route path="/addjob" element={<AddJob />} />
+            <Route path="/mypostedjobs" element={<MyPostedJobs />} />
+            <Route path="/applicants" element={<Applicants />} />
+
+            {/* Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/add-job" element={<AddJob />} />
+
+            {/* 404 */}
             <Route path="*" element={<NotFound />} />
+
+            
           </Routes>
         </main>
       </div>

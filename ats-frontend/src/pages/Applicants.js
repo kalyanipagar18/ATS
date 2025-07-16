@@ -1,59 +1,31 @@
+// 📄 Applicants.jsx - View Applicants for Posted Jobs
 import React, { useEffect, useState } from 'react';
 import './Applicants.css';
 
 const Applicants = () => {
   const [applicants, setApplicants] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/applicants')
-      .then(res => res.json())
-      .then(data => {
-        console.log('📥 Applicants API Response:', data);
-        if (Array.isArray(data)) {
-          setApplicants(data);
-        } else if (data && Array.isArray(data.applicants)) {
-          setApplicants(data.applicants);
-        } else {
-          console.error('❌ Unexpected applicants format:', data);
-          setApplicants([]);
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('❌ Error fetching applicants:', err);
-        setLoading(false);
-      });
+    // TODO: fetch applicants from backend
+    setApplicants([
+      { name: 'Aarti', email: 'aarti@mail.com', phone: '9999999999', resumeLink: '#' },
+      { name: 'Ravi', email: 'ravi@mail.com', phone: '8888888888', resumeLink: '#' }
+    ]);
   }, []);
 
   return (
     <div className="applicants-container">
-      <h2>📋 All Applicants</h2>
-
-      {loading ? (
-        <p className="empty-text">Loading applicants...</p>
-      ) : applicants.length === 0 ? (
-        <p className="empty-text">No applicants found.</p>
+      <h2>👨‍💼 Applicants</h2>
+      {applicants.length === 0 ? (
+        <p>No applicants yet.</p>
       ) : (
-        <div className="applicants-grid">
-          {applicants.map(app => (
-            <div key={app._id} className="applicant-card">
-              <h3>{app.name}</h3>
-              <p><strong>Email:</strong> {app.email}</p>
-              <p><strong>Experience:</strong> {app.totalExperience} years</p>
-              <p><strong>Status:</strong> {app.status}</p>
-              <p><strong>Score:</strong> <span className="score">{app.matchScore}%</span></p>
-              <p><strong>Applied for:</strong> {app.jobTitle}</p>
-              <div className="skills-container">
-                {app.skills?.map((skill, i) => (
-                  <span key={i} className="skill-badge">{skill}</span>
-                ))}
-              </div>
-              {app.resumeUrl && (
-                <a href={app.resumeUrl} className="resume-link" target="_blank" rel="noreferrer">
-                  📄 View Resume
-                </a>
-              )}
+        <div className="applicant-list">
+          {applicants.map((a, i) => (
+            <div key={i} className="applicant-card">
+              <h4>{a.name}</h4>
+              <p>Email: {a.email}</p>
+              <p>Phone: {a.phone}</p>
+              <a href={a.resumeLink} target="_blank" rel="noopener noreferrer" className="resume-btn">View Resume</a>
             </div>
           ))}
         </div>
